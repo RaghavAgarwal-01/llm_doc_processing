@@ -1,0 +1,9 @@
+requests
+python-docx
+chromadb
+openai
+langchain
+tqdm
+flask
+spacy
+PyPDF2

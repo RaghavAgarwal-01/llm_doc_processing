@@ -7,3 +7,4 @@ tqdm
 flask
 spacy
 PyPDF2
+gunicorn==20.1.0

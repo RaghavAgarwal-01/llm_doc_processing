@@ -4,14 +4,13 @@ import os
 
 app = Flask(__name__)
 
-# Assume semantic_search is your function that returns (docs, doc_ids)
 from semantic_search import semantic_search
 from decision_engine import decide, parse_model_response
 
 
 @lru_cache(maxsize=128)
 def cached_process(query):
-    docs, _ = semantic_search(query)  # implement semantic_search to return relevant clauses
+    docs, _ = semantic_search(query) 
     return decide(query, docs)
 
 @app.route("/ask", methods=["POST"])
@@ -56,7 +55,6 @@ def ask():
 if __name__ == "__main__":
     if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
         print("Warming up LLM...")
-        # Warmup call (adjust docs for your use case)
         _ = decide("warmup", ["Warmup clause."])
         print("Warmup complete.")
     app.run(host="0.0.0.0", port=5000, debug=True, threaded=True)

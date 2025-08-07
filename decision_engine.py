@@ -33,7 +33,6 @@ def decide(query, docs):
         )
     except requests.exceptions.RequestException as e:
         print(f"LLM request error: {e}")
-        # Return JSON string fallback so that parse_model_response can parse it
         return json.dumps({
             "Decision": "rejected",
             "Amount": 0,
@@ -45,7 +44,6 @@ def decide(query, docs):
         if chunk:
             try:
                 decoded = chunk.decode("utf-8")
-                # The streaming API sends line-delimited JSON objects.
                 for line in decoded.splitlines():
                     if not line.strip():
                         continue
@@ -54,7 +52,6 @@ def decide(query, docs):
                         if "response" in obj and obj["response"]:
                             full_response_text += obj["response"]
                     except json.JSONDecodeError:
-                        # Ignore partial/not well-formed JSON lines in chunks
                         pass
             except Exception as e:
                 print(f"Error decoding chunk: {e}")
@@ -98,10 +95,7 @@ def parse_model_response(response_text: str):
                         parsed["Justification"] = flatten_justification(parsed["Justification"])
                     return parsed
                 except json.JSONDecodeError:
-                    # Continue to search for next potential JSON object
                     pass
-
-    # Fallback if parsing fails
     return {
         "Decision": "rejected",
         "Amount": 0,

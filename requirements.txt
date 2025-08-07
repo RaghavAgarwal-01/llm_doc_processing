@@ -1,6 +1,6 @@
 python-docx
 chromadb
-openai
+ollama
 langchain
 tqdm
 spacy
